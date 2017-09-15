@@ -187,6 +187,7 @@ DIST          = /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_pre.p
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/qt_config.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_post.prf \
+		../../.qmake.stash \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/default_pre.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/mac/default_pre.prf \
@@ -357,6 +358,7 @@ Makefile: ../../idcplc-bible.pro /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/ma
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/qt_config.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/default_pre.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/mac/default_pre.prf \
@@ -522,6 +524,7 @@ Makefile: ../../idcplc-bible.pro /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/ma
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/qt_config.prf:
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/macx-clang/qmake.conf:
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/exclusive_builds.prf:
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/default_pre.prf:
 /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/mac/default_pre.prf:
@@ -609,7 +612,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_idcplc-bible.cpp
 qrc_idcplc-bible.cpp: ../../idcplc-bible.qrc \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/rcc \
-		../../view.qml
+		../../main.qml
 	/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/rcc -name idcplc-bible ../../idcplc-bible.qrc -o qrc_idcplc-bible.cpp
 
 compiler_moc_header_make_all:
@@ -629,12 +632,7 @@ compiler_clean: compiler_rcc_clean
 ####### Compile
 
 main.o: ../../main.cpp /Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtCore.framework/Headers/QStringList \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtCore.framework/Headers/qstringlist.h \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQml.framework/Headers/qqmlengine.h \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQml.framework/Headers/qqmlcontext.h \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQml.framework/Headers/qqml.h
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qguiapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 qrc_idcplc-bible.o: qrc_idcplc-bible.cpp 
