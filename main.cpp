@@ -11,15 +11,22 @@ int main(int argc, char ** argv)
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    // Cari textEditor object di qml hirarki untuk dipasangkan highlighter.
+    // Cari sourceView object di qml hirarki untuk dipasangkan highlighter.
     Highlighter *highlighter;
     QObject *root = engine.rootObjects()[0];
-    QObject *textEditor = root->findChild <QObject*>("textEditor");
-    if (textEditor != NULL)
+    QObject *sourceView = root->findChild <QObject*>("sourceView");
+    if (sourceView != NULL)
     {
-        QQuickTextDocument *doc = qvariant_cast<QQuickTextDocument*>(textEditor->property("textDocument"));
+        QQuickTextDocument *doc = qvariant_cast<QQuickTextDocument*>(sourceView->property("textDocument"));
         if (doc != NULL)
+        {
             highlighter = new Highlighter(doc->textDocument());
+
+            // Override tab width menjadi 30 device unit.
+            QTextOption textOptions = doc->textDocument()->defaultTextOption();
+            textOptions.setTabStop(30);
+            doc->textDocument()->setDefaultTextOption(textOptions);
+        }
     }
     return app.exec();
 }
