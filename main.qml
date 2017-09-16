@@ -98,6 +98,7 @@ ApplicationWindow {
             anchors.left: leftcontainer.right
             anchors.right: parent.right
 
+            /*
             TextEdit {
                 id: sourceView
                 objectName: "sourceView"
@@ -105,6 +106,16 @@ ApplicationWindow {
                 anchors.fill: parent
                 text: "void main()\n{\n\tint var = 100;\n\tprintf(\"Hello world!\");\n)"
             }
+            */
+
+            TextArea {
+                id: sourceView
+                objectName: "sourceView"
+                clip: true
+                anchors.fill: parent
+                text: "void main()\n{\n\tint var = 100;\n\tprintf(\"Hello world!\");\n)"
+            }
+
         }
 
     } // SplitView
