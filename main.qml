@@ -11,8 +11,10 @@ ApplicationWindow {
     height: 500
 
     Rectangle {
-        color: "white"
-        anchors.fill: parent
+        id: leftcontainer
+        color: "lightgray"
+        width: 250
+        height: parent.height
 
         ListView{
             id: listview
@@ -42,4 +44,22 @@ ApplicationWindow {
             }
         }
     }
+
+
+    Rectangle {
+        id: rightcontainer
+        color: "white"
+        height: parent.height
+        anchors.left: leftcontainer.right
+        anchors.right: parent.right
+
+        TextEdit {
+            id: texteditor
+            objectName: "textEditor"
+            clip: true
+            anchors.fill: parent
+            text: "void main()\n{\n\tint var = 100;\n\tprintf(\"Hello world!\");\n)"
+        }
+   }
+
 }

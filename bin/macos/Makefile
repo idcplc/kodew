@@ -48,9 +48,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../main.cpp qrc_idcplc-bible.cpp
+SOURCES       = ../../main.cpp \
+		../../highlighter.cpp qrc_idcplc-bible.cpp \
+		moc_highlighter.cpp
 OBJECTS       = main.o \
-		qrc_idcplc-bible.o
+		highlighter.o \
+		qrc_idcplc-bible.o \
+		moc_highlighter.o
 DIST          = /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_pre.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/qdevice.pri \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/device_config.prf \
@@ -209,7 +213,8 @@ DIST          = /Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/spec_pre.p
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/exceptions.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/yacc.prf \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/features/lex.prf \
-		../../../../idcplc-bible.pro  ../../main.cpp
+		../../../../idcplc-bible.pro ../../highlighter.h ../../main.cpp \
+		../../highlighter.cpp
 QMAKE_TARGET  = idcplc-bible
 DESTDIR       = 
 TARGET        = idcplc-bible.app/Contents/MacOS/idcplc-bible
@@ -583,7 +588,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../idcplc-bible.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../../main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../highlighter.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../main.cpp ../../highlighter.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -615,8 +621,17 @@ qrc_idcplc-bible.cpp: ../../idcplc-bible.qrc \
 		../../main.qml
 	/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/rcc -name idcplc-bible ../../idcplc-bible.qrc -o qrc_idcplc-bible.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_highlighter.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_highlighter.cpp
+moc_highlighter.cpp: /Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
+		../../highlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/moc
+	/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/gustaman/Qt5.7.0/5.7/clang_64/mkspecs/macx-clang -I/Users/gustaman/Desktop/GUSTAMAN5/idcplc-bible -I/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQuick.framework/Headers -I/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers -I/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQml.framework/Headers -I/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtNetwork.framework/Headers -I/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -I'/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks (framework directory)' -F/Users/gustaman/Qt5.7.0/5.7/clang_64/lib ../../highlighter.h -o moc_highlighter.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_rez_source_make_all:
@@ -627,7 +642,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -635,8 +650,18 @@ main.o: ../../main.cpp /Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qguiapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
+highlighter.o: ../../highlighter.cpp ../../highlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qtextformat.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o highlighter.o ../../highlighter.cpp
+
 qrc_idcplc-bible.o: qrc_idcplc-bible.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_idcplc-bible.o qrc_idcplc-bible.cpp
+
+moc_highlighter.o: moc_highlighter.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_highlighter.o moc_highlighter.cpp
 
 ####### Install
 
