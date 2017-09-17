@@ -56,7 +56,8 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
-    keywordFormat.setForeground(Qt::darkBlue);
+    QBrush brushKeyword (QColor(185,144,157));
+    keywordFormat.setForeground(brushKeyword);
     keywordFormat.setFontWeight(QFont::Bold);
     QStringList keywordPatterns;
     keywordPatterns << "\\bchar\\b" << "\\bclass\\b" << "\\bconst\\b"
@@ -86,12 +87,13 @@ Highlighter::Highlighter(QTextDocument *parent)
 //! [2]
 
 //! [3]
-    singleLineCommentFormat.setForeground(Qt::red);
+    QBrush brushComment (QColor(116,134,143));
+    singleLineCommentFormat.setForeground(brushComment);
     rule.pattern = QRegExp("//[^\n]*");
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
 
-    multiLineCommentFormat.setForeground(Qt::red);
+    multiLineCommentFormat.setForeground(brushComment);
 //! [3]
 
 //! [4]
@@ -103,7 +105,11 @@ Highlighter::Highlighter(QTextDocument *parent)
 
 //! [5]
     functionFormat.setFontItalic(true);
-    functionFormat.setForeground(Qt::blue);
+
+    QBrush brushFunction (QColor(115,171,225));
+    functionFormat.setForeground(brushFunction);
+
+
     rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
     rule.format = functionFormat;
     highlightingRules.append(rule);
