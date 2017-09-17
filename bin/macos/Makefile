@@ -618,6 +618,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_idcplc-bible.cpp
 qrc_idcplc-bible.cpp: ../../idcplc-bible.qrc \
 		/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/rcc \
+		../../Consolas.ttf \
 		../../main.qml
 	/Users/gustaman/Qt5.7.0/5.7/clang_64/bin/rcc -name idcplc-bible ../../idcplc-bible.qrc -o qrc_idcplc-bible.cpp
 
@@ -647,7 +648,16 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean
 ####### Compile
 
 main.o: ../../main.cpp /Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
-		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qguiapplication.h
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQuick.framework/Headers/QQuickTextDocument \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtQuick.framework/Headers/qquicktextdocument.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtCore.framework/Headers/QObject \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../highlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		/Users/gustaman/Qt5.7.0/5.7/clang_64/lib/QtGui.framework/Headers/qtextformat.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 highlighter.o: ../../highlighter.cpp ../../highlighter.h \

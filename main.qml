@@ -9,7 +9,7 @@ import QtQuick.LocalStorage 2.0
 
 ApplicationWindow {
     property var db;
-    property var mdl: [];
+    property var mdl;
     id: mainWindow
     visible: true
     color: "white"
@@ -20,10 +20,10 @@ ApplicationWindow {
     // Reload list of snippet dari db dan tampilan.
     function reload() {
         db.transaction (function(tx) {
-                var rs = tx.executeSql ('select xid, contributor, title, snippet from TSnippets');
+                var rs = tx.executeSql ('select xid from TSnippets');
                 mdl = [];
                 for (var i = 0; i < rs.rows.length; i++) {
-                    mdl.push({"xid" : rs.rows.item(i).xid, "title" : rs.rows.item(i).title, "snippet" : rs.rows.item(i).snippet});
+                    mdl.push({"xid" : rs.rows.item(i).xid});
                 }
                 browser.model = mdl
             }
@@ -71,8 +71,6 @@ ApplicationWindow {
                         renderType: Text.NativeRendering
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        //font.family: "Helvetica"
-//                        font.pointSize: 20
                         color: "lightgray"
                         text: control.text
                     }
@@ -80,7 +78,7 @@ ApplicationWindow {
             }
 
             // View untuk menampilkan daftar snippets (panel kiri).
-            ListView{
+            ListView {
                 id: browser
                 y: 30
                 width: 250
@@ -91,18 +89,24 @@ ApplicationWindow {
                 focus: true
                 model: mdl
 
-                delegate: Component{
-                    Item{
-                        property variant itemData: model.modelData
+                delegate: Component {
+                    Item {
                         width: parent.width
                         height: 20
-                        Column{
+                        Column {
                             Text {
-                                text: model.modelData.title
+                                text: {
+                                    db.transaction (function(tx) {
+                                            var rs = tx.executeSql ('select title from TSnippets where xid=?', [model.modelData.xid]);
+                                            text = rs.rows.item(0).title;
+                                        }
+                                    )
+                                }
                                 color: "lightgray"
                             }
                         }
-                        MouseArea{
+
+                        MouseArea {
                             id: itemMouseArea
                             anchors.fill: parent
 
@@ -110,13 +114,21 @@ ApplicationWindow {
                             onClicked: {
                                 browser.focus = true
                                 browser.currentIndex = index
-                                sourceView.text = mdl[ index ].snippet;
+                                db.transaction (function(tx) {
+                                        var rs = tx.executeSql ('select snippet from TSnippets where xid=?', [model.modelData.xid]);
+                                        sourceView.text = rs.rows.item(0).snippet;
+                                    }
+                                )
                             }
                         }
 
                         // On select item by keyboard.
                         onActiveFocusChanged: {
-                            sourceView.text = mdl[ browser.currentIndex ].snippet;
+                            db.transaction (function(tx) {
+                                    var rs = tx.executeSql ('select snippet from TSnippets where xid=?', [mdl[ browser.currentIndex ].xid]);
+                                    sourceView.text = rs.rows.item(0).snippet;
+                                }
+                            )
                         }
                     }
                 }
@@ -135,17 +147,21 @@ ApplicationWindow {
             TextArea {
                 id: sourceView
                 objectName: "sourceView"
+                frameVisible: false
+                font.family: "Consolas"
+                font.pointSize: 12
+                readOnly: true
 
                 style: TextAreaStyle {
-                        textColor: "lightgray"
-                        selectionColor: "steelblue"
-                        selectedTextColor: "#eee"
-                        backgroundColor: "#2E333E"
-                   }
+                    textColor: "lightgray"
+                    selectionColor: "steelblue"
+                    selectedTextColor: "#eee"
+                    backgroundColor: "#2E333E"
+                }
 
                 clip: true
                 anchors.fill: parent
-                text: "void main()\n{\n\tint var = 100;\n\tprintf(\"Hello world!\");\n)"
+                text: ""
             }
 
         }
