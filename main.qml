@@ -47,14 +47,19 @@ ApplicationWindow {
         orientation: Qt.Horizontal
 
         // Container untuk button add snippet dan listview
+        // Minimal width 200, maximal width 400, default width 250 (@geger009)
         Rectangle {
             id: leftcontainer
             color: "#323844"
             width: 250
             height: parent.height
+            Layout.minimumWidth: 200
+            Layout.maximumWidth: 400
 
             Button {
                 text: "Add Snippet"
+                anchors.top: parent.top
+                anchors.topMargin: 0
                 onClicked: addView.visible = true
                 width: 250
                 height: 30
@@ -80,9 +85,14 @@ ApplicationWindow {
             // View untuk menampilkan daftar snippets (panel kiri).
             ListView {
                 id: browser
-                y: 30
                 width: 250
-                height: parent.height
+                anchors.top: parent.top
+                anchors.topMargin: 30
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                flickableDirection: Flickable.HorizontalFlick
+                anchors.rightMargin: 0
+                anchors.leftMargin: 0
                 anchors.left: parent.left
                 anchors.right: parent.right
                 highlight: Rectangle { color: "#2B303B"}
