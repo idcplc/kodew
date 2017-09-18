@@ -9,3 +9,4 @@ INSTALLS += target
 
 HEADERS += \
     highlighter.h
+

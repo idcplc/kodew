@@ -32,13 +32,20 @@ ApplicationWindow {
 
     Component.onCompleted: {
         // Buat/buka database diawal startup app.
-        db = LocalStorage.openDatabaseSync ("idcplc-bible.sqlite", "1.0", "icplc-bible snippets storage.", 1000000);
-        db.transaction (function(tx) {
-                tx.executeSql ('create table if not exists TSnippets (xid integer primary key autoincrement, contributor text, title text, snippet text)');
-                tx.executeSql ('create index if not exists TSnippetsContributorIndex on TSnippets (contributor)');
-                reload();
-            }
-        )
+        var dbVer = "1.1";
+        db = LocalStorage.openDatabaseSync ("idcplc-bible.sqlite", "", "icplc-bible snippets storage.", 1000000);
+        if (db.version != dbVer)
+        {
+            console.log ("current db version: " + db.version + ", need to upgrade db to version " + dbVer);
+            db.changeVersion (db.version, dbVer, function(tx) {
+                    console.log ("upgrading db to version " + dbVer);
+                    tx.executeSql ('drop table if exists TSnippets');
+                    tx.executeSql ('create table if not exists TSnippets (xid integer primary key, contributor text, title text, description text, snippet text, platforms text, languages text, dialects text, category text, tag text, src text, checksum text, updated integer)');
+                    tx.executeSql ('create index if not exists TSnippetsContributorIndex on TSnippets (contributor)');
+                }
+            )
+            reload();
+        }
     }
 
     // Main screen terbagi 2 panel kiri (browser) dan kanan (TextEdit) dipisahkan dengan splitview.
