@@ -16,6 +16,8 @@ ApplicationWindow {
     title: "idcplc-bible"
     width: 800
     height: 500
+    minimumWidth: 800
+    minimumHeight: 500
 
     // Reload list of snippet dari db dan tampilan.
     function reload() {
@@ -53,7 +55,7 @@ ApplicationWindow {
             color: "#323844"
             width: 250
             height: parent.height
-            Layout.minimumWidth: 200
+            Layout.minimumWidth: 100
             Layout.maximumWidth: 400
 
             Button {
