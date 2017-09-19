@@ -2,11 +2,14 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QQuickTextDocument>
 #include <QObject>
+#include <QIcon>
 #include "highlighter.h"
 
 int main(int argc, char ** argv)
 {
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/idcplc.ico"));
+
     QFontDatabase::addApplicationFont(":/Consolas.ttf");
     QQmlApplicationEngine engine(QUrl("qrc:/main.qml"));
     if (engine.rootObjects().isEmpty())
