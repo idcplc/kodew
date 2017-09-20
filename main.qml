@@ -7,9 +7,16 @@ import QtQuick.Controls.Styles 1.2
 // SQLite driver
 import QtQuick.LocalStorage 2.0
 
+// Line Numbers
+import CodeEditor 0.1
+
 ApplicationWindow {
     property var db;
     property var mdl;
+    // Line Numbers
+    property alias text: sourceView.text
+    property alias textArea: sourceView
+    //
     id: mainWindow
     visible: true
     color: "white"
@@ -302,6 +309,16 @@ ApplicationWindow {
                 anchors.right: parent.right
             }
 
+            // Line Numbers
+            LineNumbers {
+                id: lineNumbers
+                width: 40
+                height: parent.height - (127 + 20)
+                anchors.bottomMargin: 10
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+            }
+
             // Snippet view
             TextArea {
                 id: sourceView
@@ -310,6 +327,7 @@ ApplicationWindow {
                 font.family: "Consolas"
                 font.pointSize: 12
                 readOnly: true
+                wrapMode: TextEdit.NoWrap
                 style: TextAreaStyle {
                     textColor: "lightgray"
                     selectionColor: "steelblue"
@@ -317,15 +335,39 @@ ApplicationWindow {
                     backgroundColor: "#2E333E"
                 }
                 clip: true
-                y: (127 + 10)
                 height: parent.height - (127 + 20)
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
                 anchors.bottomMargin: 10
-                anchors.left: parent.left
+                anchors.left: lineNumbers.right
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 text: ""
+
+                function update() {
+                    var lineHeight = (font.pointSize + 3) / lineCount
+                    if (lineHeight < (font.pointSize + 3)) {
+                        lineHeight = (font.pointSize + 3)
+                    }
+                    lineNumbers.lineCount = lineCount
+                    lineNumbers.scrollY = flickableItem.contentY
+                    lineNumbers.lineHeight = lineHeight
+                    lineNumbers.cursorPosition = cursorPosition
+                    lineNumbers.selectionStart = selectionStart
+                    lineNumbers.selectionEnd = selectionEnd
+                    lineNumbers.text = text
+                    lineNumbers.fontSize = font.pointSize
+                    lineNumbers.update()
+                }
+
+                Component.onCompleted: {
+                    flickableItem.contentYChanged.connect(update)
+                    update()
+                }
+
+                onLineCountChanged: update()
+                onHeightChanged: update()
+                onCursorPositionChanged: update()
             }
 
         }

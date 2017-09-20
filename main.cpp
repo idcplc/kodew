@@ -4,9 +4,12 @@
 #include <QObject>
 #include <QIcon>
 #include "highlighter.h"
+#include "linenumbers.h" // Line Numbers
 
 int main(int argc, char ** argv)
 {
+    qmlRegisterType<LineNumbers>("CodeEditor", 0, 1, "LineNumbers"); // Line Numbers
+
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/idcplc.ico"));
 

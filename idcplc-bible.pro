@@ -1,12 +1,14 @@
 QT += qml quick
 
 SOURCES += main.cpp \
-    highlighter.cpp
+    highlighter.cpp \
+    linenumbers.cpp
 RESOURCES += idcplc-bible.qrc
 
 target.path = bin/macos
 INSTALLS += target
 
 HEADERS += \
-    highlighter.h
+    highlighter.h \
+    linenumbers.h
 
