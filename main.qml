@@ -110,7 +110,9 @@ ApplicationWindow {
                 anchors.leftMargin: 0
                 anchors.left: parent.left
                 anchors.right: parent.right
-                highlight: Rectangle { color: "#2B303B"}
+                highlight: Rectangle {
+                    color: "#2B303B"
+                }
                 focus: true
                 model: mdl
 
@@ -150,17 +152,36 @@ ApplicationWindow {
                                 )
                             }
                         }
+                    }
+                } // delegate
 
-                        // On select item by keyboard.
-                        onFocusChanged: {
-                            db.transaction (function(tx) {
-                                    var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model.modelData.xid]);
-                                    labelTitle.text = rs.rows.item(0).title;
-                                    labelDescription.text = rs.rows.item(0).description;
-                                    sourceView.text = rs.rows.item(0).snippet;
-                                }
-                            )
-                        }
+                // Navigate snippet using key up.
+                Keys.onUpPressed: {
+                    if (count > 0 && currentIndex > 0)
+                    {
+                        currentIndex--;
+                        db.transaction (function(tx) {
+                                var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model[ currentIndex ].xid]);
+                                labelTitle.text = rs.rows.item(0).title;
+                                labelDescription.text = rs.rows.item(0).description;
+                                sourceView.text = rs.rows.item(0).snippet;
+                            }
+                        )
+                    }
+                }
+
+                // Navigate snippet using key down.
+                Keys.onDownPressed: {
+                    if (currentIndex < (count-1))
+                    {
+                        currentIndex++;
+                        db.transaction (function(tx) {
+                                var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model[ currentIndex ].xid]);
+                                labelTitle.text = rs.rows.item(0).title;
+                                labelDescription.text = rs.rows.item(0).description;
+                                sourceView.text = rs.rows.item(0).snippet;
+                            }
+                        )
                     }
                 }
             }
