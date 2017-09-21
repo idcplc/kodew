@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>Consolas.ttf</file>
         <file>idcplc.ico</file>
+        <file>plus.png</file>
+        <file>magnifying_glass.png</file>
+        <file>folder.png</file>
     </qresource>
 </RCC>

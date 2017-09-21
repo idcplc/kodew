@@ -12,6 +12,7 @@ import CodeEditor 0.1
 
 ApplicationWindow {
     property var db;
+    property var categories;
     property var mdl;
     // Line Numbers
     property alias text: sourceView.text
@@ -21,14 +22,20 @@ ApplicationWindow {
     visible: true
     color: "white"
     title: "idcplc-bible"
-    width: 800
-    height: 500
+    width: 900
+    height: 600
     minimumWidth: 800
-    minimumHeight: 500
+    minimumHeight: 600
 
     // Reload list of snippet dari db dan tampilan.
     function reload() {
         db.transaction (function(tx) {
+
+                // dummy model for category
+                categories = ["Algorithms", "Games", "Networking", "Server", "Uncategorized"];
+                lvCategories.model = categories
+
+
                 var rs = tx.executeSql ('select xid from TSnippets');
                 mdl = [];
                 for (var i = 0; i < rs.rows.length; i++) {
@@ -67,6 +74,108 @@ ApplicationWindow {
             color: "#3D4451"
         }
 
+        // Category panel
+        Rectangle {
+            id: categoryContainer
+            color: "#323844"
+            width: 170
+            height: parent.height
+
+            // Category label
+            Label {
+                y: 10
+                height: 15
+                text: "Categories"
+                verticalAlignment: Text.AlignVCenter
+                color: "lightgray"
+                anchors.leftMargin: 10
+                anchors.left: parent.left
+                anchors.rightMargin: 10
+                anchors.right: parent.right
+            }
+
+            // View untuk menampilkan daftar snippets (panel kiri).
+            ListView {
+                id: lvCategories
+                x: 0
+                width: 250
+                anchors.top: parent.top
+                anchors.topMargin: 31
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                flickableDirection: Flickable.HorizontalFlick
+                anchors.rightMargin: 0
+                anchors.leftMargin: 0
+                anchors.left: parent.left
+                anchors.right: parent.right
+                highlight: Rectangle {
+                    color: "#2B303B"
+                }
+                focus: true
+                model: categories
+
+                delegate: Component {
+                    Item {
+                        width: parent.width
+                        height: 30
+
+                        // Category image
+                        Image {
+                            source: "folder.png"
+                            y: 8
+                            height: 15
+                            width: 15
+                            anchors.leftMargin: 20
+                            anchors.left: parent.left
+                        }
+
+                        // Category name
+                        Label {
+                            y: 5
+                            height: 20
+                            text: {
+                                text = model.modelData;
+                            }
+                            verticalAlignment: Text.AlignVCenter
+                            color: "lightgray"
+                            anchors.leftMargin: 42
+                            anchors.left: parent.left
+                            anchors.rightMargin: 10
+                            anchors.right: parent.right
+                        }
+
+                        MouseArea {
+                            id: itemMouseArea
+                            anchors.fill: parent
+
+                            // On select item with mouse click
+                            onClicked: {
+                                lvCategories.focus = true
+                                lvCategories.currentIndex = index
+                            }
+                        }
+                    }
+                } // delegate
+
+                // Navigate snippet using key up.
+                Keys.onUpPressed: {
+                    if (count > 0 && currentIndex > 0)
+                    {
+                        currentIndex--;
+                    }
+                }
+
+                // Navigate snippet using key down.
+                Keys.onDownPressed: {
+                    if (currentIndex < (count-1))
+                    {
+                        currentIndex++;
+                    }
+                }
+            } // ListView
+
+        }
+
         // Container untuk button add snippet dan listview
         // Minimal width 200, maximal width 400, default width 250 (@geger009)
         Rectangle {
@@ -77,30 +186,71 @@ ApplicationWindow {
             Layout.minimumWidth: 100
             Layout.maximumWidth: 400
 
-            Button {
-                text: "Add Snippet"
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                onClicked: addView.visible = true
-                width: 250
-                height: 30
-                anchors.left: parent.left
-                anchors.right: parent.right
-                style: ButtonStyle {
-                    background: Rectangle {
-                        color: "#3C4351"
-                        border.width: 0
-                        radius: 0
-                    }
+            //anchors.left: categoryContainer.right
+            //anchors.right: rightcontainer.left
 
-                    label: Text {
-                        renderType: Text.NativeRendering
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        color: "lightgray"
-                        text: control.text
+            // Search bar
+            Rectangle {
+                color: "transparent"
+                width: parent.width
+                height: 30
+
+                // Magnifier button
+                Button {
+                    iconSource: "magnifying_glass.png"
+                    width: 30
+                    height: parent.height
+                    anchors.leftMargin: 10
+                    anchors.left: parent.left
+                    style: ButtonStyle {
+                        background: Rectangle {
+                            color: "transparent"
+                        }
                     }
                 }
+
+                // Search text field
+                TextField {
+                    id: txtSearch
+                    placeholderText: qsTr("Search...")
+                    height: parent.height
+                    anchors.leftMargin: 40
+                    anchors.left: parent.left
+                    anchors.rightMargin: 40
+                    anchors.right: parent.right
+                    style: TextFieldStyle {
+                        placeholderTextColor: "darkGray"
+                        textColor: "white"
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+                    }
+                }
+
+                // Plus button
+                Button {
+                    iconSource: "plus.png"
+                    width: 30
+                    height: parent.height
+                    anchors.rightMargin: 10
+                    anchors.right: parent.right
+                    style: ButtonStyle {
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+                    }
+                    onClicked: addView.visible = true
+                }
+            }
+
+            // Separator
+            Rectangle {
+                color: "#3D4451"
+                x: 0
+                y: 30
+                height: 1
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
 
             // View untuk menampilkan daftar snippets (panel kiri).
@@ -109,7 +259,7 @@ ApplicationWindow {
                 x: 0
                 width: 250
                 anchors.top: parent.top
-                anchors.topMargin: 30
+                anchors.topMargin: 31
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
                 flickableDirection: Flickable.HorizontalFlick
@@ -124,23 +274,62 @@ ApplicationWindow {
                 model: mdl
 
                 delegate: Component {
-                    Item {
-                        x: 10
+                    Item {                        
                         width: parent.width
-                        height: 25
-                        Column {
-                            anchors.verticalCenter: parent.verticalCenter
-                            Text {
-                                text: {
-                                    db.transaction (function(tx) {
-                                            var rs = tx.executeSql ('select title from TSnippets where xid=?', [model.modelData.xid]);
-                                            text = rs.rows.item(0).title;
-                                        }
-                                    )
-                                }
-                                color: "lightgray"
+                        height: 60
+
+                        // Title label
+                        Label {
+                            y: 10
+                            height: 15
+                            text: {
+                                db.transaction (function(tx) {
+                                        var rs = tx.executeSql ('select title from TSnippets where xid=?', [model.modelData.xid]);
+                                        text = rs.rows.item(0).title;
+                                    }
+                                )
                             }
+                            verticalAlignment: Text.AlignVCenter
+                            color: "lightgray"
+                            anchors.leftMargin: 10
+                            anchors.left: parent.left
+                            anchors.rightMargin: 10
+                            anchors.right: parent.right
                         }
+
+                        // Platform label
+                        Label {
+                            y: 35
+                            height: 15
+                            text: "Linux"
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#929A97"
+                            anchors.leftMargin: 10
+                            anchors.left: parent.left
+                            anchors.rightMargin: 10
+                            anchors.right: parent.right
+                        }
+
+                        // Datetime label
+                        Label {
+                            y: 35
+                            height: 15
+                            text: "10:45"
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#929A97"
+                            anchors.rightMargin: 10
+                            anchors.right: parent.right
+                        }
+
+                        // Separator
+                        Rectangle {
+                            color: "#3D4451"
+                            y: 59
+                            height: 1
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                        }
+
 
                         MouseArea {
                             id: itemMouseArea
@@ -191,7 +380,7 @@ ApplicationWindow {
                         )
                     }
                 }
-            }
+            } // LiseView
         }
 
         // Container untuk source code/snippet.
