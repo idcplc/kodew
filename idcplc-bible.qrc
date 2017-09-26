@@ -6,5 +6,9 @@
         <file>plus.png</file>
         <file>magnifying_glass.png</file>
         <file>folder.png</file>
+        <file>AddSnippetView.qml</file>
+        <file>CategoryBrowser.qml</file>
+        <file>SnippetBrowser.qml</file>
+        <file>CodeViewer.qml</file>
     </qresource>
 </RCC>
