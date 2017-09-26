@@ -77,7 +77,7 @@ Rectangle {
     Button {
         text: "OK"
         onClicked: {
-            addView.visible = false
+            addSnippetView.visible = false
             db.transaction (function(tx) {
                     tx.executeSql ('insert into TSnippets (contributor, title, category, languages, description, snippet) values (?, ?, ?, ?, ?, ?)', [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text]);
                     reload();
@@ -99,7 +99,7 @@ Rectangle {
 
     Button {
         text: "Cancel"
-        onClicked: addView.visible = false
+        onClicked: addSnippetView.visible = false
         x: 250
         y: 420
         width: 250

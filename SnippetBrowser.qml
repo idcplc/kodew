@@ -71,7 +71,7 @@ Rectangle {
                     color: "transparent"
                 }
             }
-            onClicked: addView.visible = true
+            onClicked: addSnippetView.visible = true
         }
     }
 
