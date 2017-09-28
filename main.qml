@@ -26,7 +26,7 @@ ApplicationWindow {
                 // Load up categories to categoryBrowser.
                 var rs = tx.executeSql ('select distinct category from TSnippets');
                 mainWindow.categories = [];
-                mainWindow.categories.push({"category" : "Uncategorized"});
+                mainWindow.categories.push({"category" : "All"});
                 for (var i = 0; i < rs.rows.length; i++) {
                     mainWindow.categories.push({"category" : rs.rows.item(i).category});
                 }
@@ -41,7 +41,7 @@ ApplicationWindow {
         var filter = snippetBrowser.txtSearch.text;
         db.transaction (function(tx) {
                 var rs;
-                if (activeCategory == 'Uncategorized')
+                if (activeCategory == 'All')
                     rs = tx.executeSql ("select xid from TSnippets where title like '%" + filter + "%'");
                 else
                     rs = tx.executeSql ('select xid from TSnippets where category=?', [activeCategory]);
