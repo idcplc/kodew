@@ -12,8 +12,8 @@ import QtQuick.LocalStorage 2.0
 // Minimal width 200, maximal width 400, default width 250 (@geger009)
 Rectangle {
     id: snippetBrowser
-
     property alias browser : browser
+    property alias txtSearch : txtSearch
 
     color: "#323844"
     width: 250
@@ -56,6 +56,10 @@ Rectangle {
                 background: Rectangle {
                     color: "transparent"
                 }
+            }
+
+            Keys.onReturnPressed: {
+                mainWindow.reload();
             }
         }
 

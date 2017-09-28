@@ -10,6 +10,8 @@ import QtQuick.LocalStorage 2.0
 // Category browser
 Rectangle {
     id: categoryBrowser
+    property alias browser : browser
+
     color: "#323844"
     width: 170
     height: parent.height
@@ -29,7 +31,7 @@ Rectangle {
 
     // View untuk menampilkan daftar snippets (panel kiri).
     ListView {
-        id: lvCategories
+        id: browser
         x: 0
         width: 250
         anchors.top: parent.top
@@ -67,7 +69,7 @@ Rectangle {
                     y: 5
                     height: 20
                     text: {
-                        text = model.modelData;
+                        text = model.modelData.category;
                     }
                     verticalAlignment: Text.AlignVCenter
                     color: "lightgray"
@@ -83,26 +85,29 @@ Rectangle {
 
                     // On select item with mouse click
                     onClicked: {
-                        lvCategories.focus = true
-                        lvCategories.currentIndex = index
+                        browser.focus = true
+                        browser.currentIndex = index
+                        mainWindow.reloadSnippets();
                     }
                 }
             }
         } // delegate
 
-        // Navigate snippet using key up.
+        // Navigate using key up.
         Keys.onUpPressed: {
             if (count > 0 && currentIndex > 0)
             {
                 currentIndex--;
+                mainWindow.reloadSnippets();
             }
         }
 
-        // Navigate snippet using key down.
+        // Navigate using key down.
         Keys.onDownPressed: {
             if (currentIndex < (count-1))
             {
                 currentIndex++;
+                mainWindow.reloadSnippets();
             }
         }
     } // ListView

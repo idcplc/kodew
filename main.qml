@@ -29,13 +29,30 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 600
 
-    // Reload list of snippet dari db dan tampilan.
     function reload() {
         db.transaction (function(tx) {
-                // dummy model for category
-                mainWindow.categories = ["Algorithms", "Games", "Networking", "Server", "Uncategorized"];
+                // Load up categories to categoryBrowser.
+                var rs = tx.executeSql ('select distinct category from TSnippets');
+                mainWindow.categories = [];
+                mainWindow.categories.push({"category" : "Uncategorized"});
+                for (var i = 0; i < rs.rows.length; i++) {
+                    mainWindow.categories.push({"category" : rs.rows.item(i).category});
+                }
+                categoryBrowser.browser.model = mainWindow.categories;
+                reloadSnippets();
+            }
+        )
+    }
 
-                var rs = tx.executeSql ('select xid from TSnippets');
+    function reloadSnippets() {
+        var activeCategory = categoryBrowser.browser.model[ categoryBrowser.browser.currentIndex ].category;
+        var filter = snippetBrowser.txtSearch.text;
+        db.transaction (function(tx) {
+                var rs;
+                if (activeCategory == 'Uncategorized')
+                    rs = tx.executeSql ("select xid from TSnippets where title like '%" + filter + "%'");
+                else
+                    rs = tx.executeSql ('select xid from TSnippets where category=?', [activeCategory]);
                 mainWindow.mdl = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     mainWindow.mdl.push({"xid" : rs.rows.item(i).xid});
@@ -44,6 +61,7 @@ ApplicationWindow {
             }
         )
     }
+
 
     Component.onCompleted: {
         // Buat/buka database diawal startup app.
