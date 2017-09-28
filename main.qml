@@ -7,18 +7,10 @@ import QtQuick.Controls.Styles 1.2
 // SQLite driver
 import QtQuick.LocalStorage 2.0
 
-// Line Numbers
-import CodeEditor 0.1
-
 ApplicationWindow {
     property var db;
     property var categories;
     property var mdl;
-
-    // Line Numbers
-//    property alias text: sourceView.text
-//    property alias textArea: sourceView
-    //
 
     id: mainWindow
     visible: true

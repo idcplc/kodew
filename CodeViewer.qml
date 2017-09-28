@@ -7,9 +7,6 @@ import QtQuick.Controls.Styles 1.2
 // SQLite driver
 import QtQuick.LocalStorage 2.0
 
-// Line Numbers
-import CodeEditor 0.1
-
 // Code viewer
 Rectangle {
     id: codeViewer
@@ -130,108 +127,203 @@ Rectangle {
     }
 
     // Line Numbers
-    LineNumbers {
+    // https://forum.qt.io/topic/29016/solved-code-editor-using-qml/4
+    Rectangle {
         id: lineNumbers
-        width: 40
+        property int rowHeight: sourceView.font.pixelSize + 3
+        color: "transparent"
+        width: 35
         height: parent.height - (127 + 20)
         anchors.bottomMargin: 10
         anchors.left: parent.left
         anchors.bottom: parent.bottom
+        clip: true
+        Column {
+            y: -sourceView.flickableItem.contentY + 4
+            Repeater {
+                model: sourceView.lineCount
+                delegate: Text {
+                    id: text
+                    color: "#666"
+                    font: sourceView.font
+                    width: lineNumbers.width
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    height: lineNumbers.rowHeight
+                    renderType: Text.NativeRendering
+                    text: index + 1
+                }
+            }
+        }
     }
 
     // Snippet view
-    TextArea {
-        id: sourceView
-        objectName: "sourceView"
-        frameVisible: false
-        font.family: "Consolas"
-        font.pointSize: 12
-        readOnly: true
-        wrapMode: TextEdit.NoWrap
-        style: TextAreaStyle {
-            textColor: "lightgray"
-            selectionColor: "steelblue"
-            selectedTextColor: "#eee"
-            backgroundColor: "#2E333E"
-        }
-        clip: true
+    FocusScope {
+        id: root
+        property alias font: sourceView.font
+        property alias text: sourceView.text
+
         height: parent.height - (127 + 20)
+        anchors.left: lineNumbers.right
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         anchors.bottomMargin: 10
-        anchors.left: lineNumbers.right
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        text: ""
 
-        function update() {
-            var lineHeight = (font.pointSize + 3) / lineCount
-            if (lineHeight < (font.pointSize + 3)) {
-                lineHeight = (font.pointSize + 3)
+        TextArea {
+            id: sourceView
+            property var curPosRect // rectangle
+            property bool disableReciever: false
+
+            focus:true
+            objectName: "sourceView"
+            frameVisible: false
+            font.family: "Consolas"
+            font.pointSize: 12
+            readOnly: true
+            wrapMode: TextEdit.NoWrap
+            style: TextAreaStyle {
+                textColor: "lightgray"
+                selectionColor: "steelblue"
+                selectedTextColor: "#eee"
+                backgroundColor: "#2E333E"
+
+                // https://forum.qt.io/topic/68264/any-way-to-customize-the-appearance-of-textarea-scrollview-scrollbars/7
+                incrementControl: null
+                decrementControl: null
+                handle: Rectangle {
+                    implicitWidth: 10
+                    implicitHeight: 10
+                    color: styleData.pressed ? "dimgray" : "gray"
+                    radius: 10
+                    opacity:0.7
+                }
+
+                corner:Rectangle{
+                    color: "#1E000000"
+                }
+                scrollBarBackground: Rectangle {
+                    implicitWidth: 10
+                    implicitHeight: 10
+                    color: "#1E000000"
+                    radius: 10
+                }
             }
-            lineNumbers.lineCount = lineCount
-            lineNumbers.scrollY = flickableItem.contentY
-            lineNumbers.lineHeight = lineHeight
-            lineNumbers.cursorPosition = cursorPosition
-            lineNumbers.selectionStart = selectionStart
-            lineNumbers.selectionEnd = selectionEnd
-            lineNumbers.text = text
-            lineNumbers.fontSize = font.pointSize
-            lineNumbers.update()
-        }
+            anchors.fill: parent
+            text: ""
+            Component.onCompleted: {
+                flickableItem.contentYChanged.connect(update)
+            }
 
-        Component.onCompleted: {
-            flickableItem.contentYChanged.connect(update)
-            update()
-        }
+            onLineCountChanged: {
+                this.disableReciever = true
+                this.curPosRect = positionToRectangle(0)
+                this.disableReciever = false
+            }
 
-        onLineCountChanged: update()
-        onHeightChanged: update()
-        onCursorPositionChanged: update()
+            onCursorPositionChanged: {
+                if (this.selectionStart && this.selectionEnd)
+                {
+                    this.disableReciever = true
+                    this.curPosRect = cursorRectangle
+                    this.disableReciever = false
+                }
+            }
+
+            function receievePos(postX, postY)
+            {
+                if (disableReciever == false)
+                {
+                    var curPos = positionAt(postX, postY + sourceView.flickableItem.contentY)
+                    this.curPosRect = positionToRectangle(curPos)
+                }
+            }
+
+            Rectangle {
+                signal dropSignal(string fname)
+                id: dropArea
+                objectName: "dropArea"
+                visible: true
+                color: "transparent"
+                anchors.fill: parent
+                DropArea {
+                    id: drop
+                    anchors.fill: parent
+                    enabled: true
+
+                    onEntered: {
+                        parent.color="#801178FC"
+                        textDrop.visible=true;
+                        console.log("entered");
+                    }
+
+                    onExited:{
+                        parent.color="transparent"
+                        textDrop.visible=false;
+                        console.log("exited");
+                    }
+
+                    onDropped: function(drag){
+                        console.log(drag.text);
+                        parent.dropSignal(drag.text);
+                        parent.color="transparent"
+                        textDrop.visible=false;
+                        console.log("dropped");
+                    }
+                }
+                Text {
+                    visible:false
+                    id: textDrop
+                    anchors.centerIn: parent
+                    text: "Drop file"
+                    color: "white"
+                    font.pointSize: 24
+                    font.family: "Consolas"
+                }
+            }    // drag and drop area
+        }
 
         Rectangle {
-            signal dropSignal(string fname)
-            id: dropArea
-            objectName: "dropArea"
-            visible: true
-            color: "transparent"
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.top: parent.top
-            DropArea {
-                id: drop
-                anchors.fill: parent
- 
-                enabled: true
- 
-                onEntered: {
-                    parent.color="#500000FF"
-                    imgDrop.visible=true;
-                    console.log("entered");
-                }
- 
-                onExited:{
-                    parent.color="transparent"
-                    imgDrop.visible=false;
-                    console.log("exited");
-                }
- 
-                onDropped: function(drag){
-                    console.log(drag.text);
-                    parent.dropSignal(drag.text);
-                    parent.color="transparent"
-                    imgDrop.visible=false;
-                    console.log("dropped");
-                }
+            id:highlight
+            y: (sourceView.curPosRect) ? (sourceView.curPosRect.y - sourceView.flickableItem.contentY) : 0
+            color: "lightsteelblue"
+            height: sourceView.cursorRectangle.height
+            width: root.width
+            visible: (y < sourceView.y - (this.height * 1/3)) ? false : true
+            opacity: 0.1
+        } // current line highlight
+
+        //https://stackoverflow.com/questions/16183408/mousearea-stole-qml-elements-mouse-events
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            propagateComposedEvents: true
+            onClicked: mouse.accepted = false
+            onPressed: mouse.accepted = false
+            onReleased: mouse.accepted = false
+            onDoubleClicked: mouse.accepted = false
+            onPositionChanged: {
+                mouse.accepted = false
+                forward(mouse)
             }
-            Image {
-                source: "plus.png"
-                visible: false
-                id: imgDrop
-                anchors.centerIn: parent
+
+            onPressAndHold:mouse.accepted = false;
+
+            onWheel: function(whell){
+                whell.accepted = false
+                forward(whell)
+            }
+
+            function forward(event) {
+                mouseArea.visible = false
+                var item = parent.childAt(event.x, event.y)
+                mouseArea.visible = true
+                if (item && item.receievePos)
+                    item.receievePos(mouseX, mouseY)
             }
         }
     }
-    // drag and drop area
 } // Code viewer
+
