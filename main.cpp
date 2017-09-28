@@ -5,6 +5,7 @@
 #include <QIcon>
 #include "highlighter.h"
 #include "linenumbers.h" // Line Numbers
+#include "dragdrophandler.h" // dragdrop file handler
 
 int main(int argc, char ** argv)
 {
@@ -35,6 +36,13 @@ int main(int argc, char ** argv)
             doc->textDocument()->setDefaultTextOption(textOptions);
         }
     }
+
+    // untuk dragdrop file
+    DragDropHandler ddh(root);
+    QObject *dropArea = sourceView->findChild <QObject*>("dropArea");
+    QObject::connect(dropArea, SIGNAL(dropSignal(QString)), 
+                     &ddh, SLOT(runHandler(QString)));
+    
     return app.exec();
 }
 

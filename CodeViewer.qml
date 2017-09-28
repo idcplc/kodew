@@ -188,5 +188,50 @@ Rectangle {
         onLineCountChanged: update()
         onHeightChanged: update()
         onCursorPositionChanged: update()
+
+        Rectangle {
+            signal dropSignal(string fname)
+            id: dropArea
+            objectName: "dropArea"
+            visible: true
+            color: "transparent"
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            DropArea {
+                id: drop
+                anchors.fill: parent
+ 
+                enabled: true
+ 
+                onEntered: {
+                    parent.color="#800000FF"
+                    textDrop.visible=true;
+                    console.log("entered");
+                }
+ 
+                onExited:{
+                    parent.color="transparent"
+                    textDrop.visible=false;
+                    console.log("exited");
+                }
+ 
+                onDropped: function(drag){
+                    console.log(drag.text);
+                    parent.dropSignal(drag.text);
+                    parent.color="transparent"
+                    textDrop.visible=false;
+                    console.log("dropped");
+                }
+            }
+            Text {
+                visible:false
+                id: textDrop
+                anchors.centerIn: parent
+                text: "Drop file"
+            }
+        }
     }
+    // drag and drop area
 } // Code viewer

@@ -10,6 +10,7 @@ import QtQuick.LocalStorage 2.0
 // View untuk input snippet.
 Rectangle {
     id: addSnippetView
+    objectName: "addSnippetView"
     visible: false
     color: "#495264"
     width: 500
@@ -68,6 +69,7 @@ Rectangle {
         height: 180
         TextArea {
             id: editSnippet
+            objectName: "editSnippet"
             frameVisible: false
             anchors.fill: parent
             clip: true
