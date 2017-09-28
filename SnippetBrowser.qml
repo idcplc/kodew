@@ -209,9 +209,9 @@ Rectangle {
                 currentIndex++;
                 db.transaction (function(tx) {
                         var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model[ currentIndex ].xid]);
-                        labelTitle.text = rs.rows.item(0).title;
-                        labelDescription.text = rs.rows.item(0).description;
-                        sourceView.text = rs.rows.item(0).snippet;
+                        codeViewer.labelTitle.text = rs.rows.item(0).title;
+                        codeViewer.labelDescription.text = rs.rows.item(0).description;
+                        codeViewer.sourceView.text = rs.rows.item(0).snippet;
                     }
                 )
             }
