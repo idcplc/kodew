@@ -206,14 +206,14 @@ Rectangle {
                 enabled: true
  
                 onEntered: {
-                    parent.color="#800000FF"
-                    textDrop.visible=true;
+                    parent.color="#500000FF"
+                    imgDrop.visible=true;
                     console.log("entered");
                 }
  
                 onExited:{
                     parent.color="transparent"
-                    textDrop.visible=false;
+                    imgDrop.visible=false;
                     console.log("exited");
                 }
  
@@ -221,15 +221,15 @@ Rectangle {
                     console.log(drag.text);
                     parent.dropSignal(drag.text);
                     parent.color="transparent"
-                    textDrop.visible=false;
+                    imgDrop.visible=false;
                     console.log("dropped");
                 }
             }
-            Text {
-                visible:false
-                id: textDrop
+            Image {
+                source: "plus.png"
+                visible: false
+                id: imgDrop
                 anchors.centerIn: parent
-                text: "Drop file"
             }
         }
     }
