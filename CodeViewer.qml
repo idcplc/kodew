@@ -253,14 +253,14 @@ Rectangle {
                     enabled: true
 
                     onEntered: {
-                        parent.color="#801178FC"
-                        textDrop.visible=true;
+                        parent.color="#670A75FD"
+                        dropLayer.visible=true;
                         console.log("entered");
                     }
 
                     onExited:{
                         parent.color="transparent"
-                        textDrop.visible=false;
+                        dropLayer.visible=false;
                         console.log("exited");
                     }
 
@@ -268,18 +268,36 @@ Rectangle {
                         console.log(drag.text);
                         parent.dropSignal(drag.text);
                         parent.color="transparent"
-                        textDrop.visible=false;
+                        dropLayer.visible=false;
                         console.log("dropped");
                     }
                 }
-                Text {
-                    visible:false
-                    id: textDrop
-                    anchors.centerIn: parent
-                    text: "Drop file"
-                    color: "white"
-                    font.pointSize: 24
-                    font.family: "Consolas"
+                Column {
+                    id:dropLayer
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: false
+                    spacing:-15
+                    Text{
+                        id:plusDrop
+                        text:"+"
+                        color: "white"
+                        font.pointSize: 64
+                        font.family: "Consolas"
+                        font.bold: true
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        style: Text.Raised;
+                        styleColor: "#F0F0F0"
+
+                    }
+                    Text {
+                        id: textDrop
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "Add snippet"
+                        color: "white"
+                        font.pointSize: 24
+                        font.family: "Consolas"
+                    }
                 }
             }    // drag and drop area
         }
