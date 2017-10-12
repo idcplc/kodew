@@ -10,5 +10,6 @@
         <file>CategoryBrowser.qml</file>
         <file>SnippetBrowser.qml</file>
         <file>CodeViewer.qml</file>
+        <file>AddWSnippetWindow.qml</file>
     </qresource>
 </RCC>

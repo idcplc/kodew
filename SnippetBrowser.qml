@@ -75,7 +75,15 @@ Rectangle {
                     color: "transparent"
                 }
             }
-            onClicked: addSnippetView.visible = true
+            onClicked:
+            {
+                var win;
+                var component = Qt.createComponent("AddWSnippetWindow.qml");
+                //component:db = db;
+                win = component.createObject(snippetBrowser);
+                win.db = db;
+                win.show();
+            }
         }
     }
 
