@@ -65,6 +65,8 @@ Rectangle {
 
         // Plus button
         Button {
+            id: btnAddSnippet
+            objectName: "btnAddSnippet"
             iconSource: "plus.png"
             width: 30
             height: parent.height
@@ -77,12 +79,7 @@ Rectangle {
             }
             onClicked:
             {
-                var win;
-                var component = Qt.createComponent("AddWSnippetWindow.qml");
-                //component:db = db;
-                win = component.createObject(snippetBrowser);
-                win.db = db;
-                win.show();
+                addSnippetView.visible = true
             }
         }
     }

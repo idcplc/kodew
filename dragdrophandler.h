@@ -8,6 +8,10 @@ class DragDropHandler: public QObject
     Q_OBJECT
 public:
     explicit DragDropHandler(QObject *parent = 0);
+
+signals:
+    void triggered();
+
 public slots:
     void runHandler(QString file);
 };

@@ -2,9 +2,6 @@
 #include <QDebug>
 #include <QFile>
 
-
-
-
 DragDropHandler::DragDropHandler(QObject *parent): QObject(parent)
 {
 
@@ -28,7 +25,7 @@ void DragDropHandler::runHandler(QString file)
     files.open(QIODevice::ReadOnly);
 
     QTextStream in(&files);
-    
+
     QObject *addSnippetView = this->parent()->findChild<QObject*>("addSnippetView");
     if(addSnippetView){
         qDebug() << "addSnippetView" << "\n";

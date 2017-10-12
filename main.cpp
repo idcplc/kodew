@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
     QObject *dropArea = sourceView->findChild <QObject*>("dropArea");
     QObject::connect(dropArea, SIGNAL(dropSignal(QString)), 
                      &ddh, SLOT(runHandler(QString)));
-    
+
     return app.exec();
 }
 

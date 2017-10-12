@@ -76,6 +76,16 @@ Rectangle {
         }
     }
 
+    function clearForm()
+    {
+        txtContributor.text = ""
+        txtTitle.text = ""
+        txtCategory.text = ""
+        txtLanguages.text = ""
+        txtDescription.text = ""
+        editSnippet.text = ""
+    }
+
     Button {
         text: "OK"
         onClicked: {
@@ -85,6 +95,7 @@ Rectangle {
                     reload();
                 }
             )
+            clearForm();
         }
         x: 0
         y: 420
@@ -101,7 +112,11 @@ Rectangle {
 
     Button {
         text: "Cancel"
-        onClicked: addSnippetView.visible = false
+        onClicked:
+        {
+            addSnippetView.visible = false
+            clearForm();
+        }
         x: 250
         y: 420
         width: 250
