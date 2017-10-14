@@ -112,3 +112,9 @@ ipch/
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
+
+##from qmake
+.qmake.stash
+Makefile
+Makefile.Debug
+Makefile.Release

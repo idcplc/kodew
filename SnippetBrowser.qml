@@ -65,6 +65,8 @@ Rectangle {
 
         // Plus button
         Button {
+            id: btnAddSnippet
+            objectName: "btnAddSnippet"
             iconSource: "plus.png"
             width: 30
             height: parent.height
@@ -75,7 +77,10 @@ Rectangle {
                     color: "transparent"
                 }
             }
-            onClicked: addSnippetView.visible = true
+            onClicked:
+            {
+                addSnippetView.visible = true
+            }
         }
     }
 

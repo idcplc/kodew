@@ -76,6 +76,16 @@ Rectangle {
         }
     }
 
+    function clearForm()
+    {
+        txtContributor.text = ""
+        txtTitle.text = ""
+        txtCategory.text = ""
+        txtLanguages.text = ""
+        txtDescription.text = ""
+        editSnippet.text = ""
+    }
+
     Button {
         text: "OK"
         onClicked: {
@@ -83,6 +93,7 @@ Rectangle {
             db.transaction (function(tx) {
                     tx.executeSql ('insert into TSnippets (contributor, title, category, languages, description, snippet) values (?, ?, ?, ?, ?, ?)', [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text]);
                     reload();
+                    clearForm();
                 }
             )
         }
@@ -101,7 +112,11 @@ Rectangle {
 
     Button {
         text: "Cancel"
-        onClicked: addSnippetView.visible = false
+        onClicked:
+        {
+            addSnippetView.visible = false
+            clearForm();
+        }
         x: 250
         y: 420
         width: 250
