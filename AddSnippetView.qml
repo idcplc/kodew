@@ -93,9 +93,9 @@ Rectangle {
             db.transaction (function(tx) {
                     tx.executeSql ('insert into TSnippets (contributor, title, category, languages, description, snippet) values (?, ?, ?, ?, ?, ?)', [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text]);
                     reload();
+                    clearForm();
                 }
             )
-            clearForm();
         }
         x: 0
         y: 420
