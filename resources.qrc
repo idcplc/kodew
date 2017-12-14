@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/Consolas.ttf</file>
+        <file>res/folder.png</file>
+        <file>res/idcplc.ico</file>
+        <file>res/magnifying_glass.png</file>
+        <file>res/plus.png</file>
+    </qresource>
+</RCC>

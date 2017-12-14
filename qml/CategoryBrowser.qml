@@ -56,7 +56,7 @@ Rectangle {
 
                 // Category image
                 Image {
-                    source: "folder.png"
+                    source: "qrc:/res/folder.png"
                     y: 8
                     height: 15
                     width: 15

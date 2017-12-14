@@ -1,15 +1,16 @@
 QT += qml quick
 
-SOURCES += main.cpp \
-    highlighter.cpp \
-    dragdrophandler.cpp
+SOURCES += src/main.cpp \
+    src/highlighter.cpp \
+    src/dragdrophandler.cpp
 
-RESOURCES += idcplc-bible.qrc
+RESOURCES += qml.qrc \
+    resources.qrc
 
 target.path = bin/macos
 INSTALLS += target
 
 HEADERS += \
-    highlighter.h \
-    dragdrophandler.h
+    src/highlighter.h \
+    src/dragdrophandler.h
 

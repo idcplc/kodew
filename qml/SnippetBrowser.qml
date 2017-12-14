@@ -29,7 +29,7 @@ Rectangle {
 
         // Magnifier button
         Button {
-            iconSource: "magnifying_glass.png"
+            iconSource: "qrc:/res/magnifying_glass.png"
             width: 30
             height: parent.height
             anchors.leftMargin: 10
@@ -67,7 +67,7 @@ Rectangle {
         Button {
             id: btnAddSnippet
             objectName: "btnAddSnippet"
-            iconSource: "plus.png"
+            iconSource: "qrc:/res/plus.png"
             width: 30
             height: parent.height
             anchors.rightMargin: 10
