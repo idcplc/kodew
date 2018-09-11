@@ -28,7 +28,11 @@ ApplicationWindow {
                 mainWindow.categories = [];
                 mainWindow.categories.push({"category" : "All"});
                 for (var i = 0; i < rs.rows.length; i++) {
-                    mainWindow.categories.push({"category" : rs.rows.item(i).category});
+                    var cat = rs.rows.item(i).category;
+                    if(cat.toUpperCase() === "ALL") {
+                        continue;
+                    }
+                    mainWindow.categories.push({"category" : cat});
                 }
                 categoryBrowser.browser.model = mainWindow.categories;
                 reloadSnippets();
