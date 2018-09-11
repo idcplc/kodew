@@ -118,3 +118,10 @@ ipch/
 Makefile
 Makefile.Debug
 Makefile.Release
+
+## Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
