@@ -22,7 +22,7 @@ Highlighter::Highlighter(QTextDocument *parent)
                     << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
                     << "\\bunion\\b" << "\\bunsigned\\b" << "\\bvirtual\\b"
                     << "\\bvoid\\b" << "\\bvolatile\\b";
-    foreach (const QString &pattern, keywordPatterns) {
+    for(const QString &pattern: keywordPatterns) {
         rule.pattern = QRegExp(pattern);
         rule.format = keywordFormat;
         highlightingRules.append(rule);
@@ -90,7 +90,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 //! [7]
 void Highlighter::highlightBlock(const QString &text)
 {
-    foreach (const HighlightingRule &rule, highlightingRules) {
+    for(const HighlightingRule &rule: highlightingRules) {
         QRegExp expression(rule.pattern);
         int index = expression.indexIn(text);
         while (index >= 0) {
