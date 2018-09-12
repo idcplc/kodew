@@ -112,6 +112,16 @@ Rectangle {
             color: "#2B303B"
         }
         focus: true
+
+        function displayCodeByIndex(index) {
+            db.transaction (function(tx) {
+                var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [index]);
+                codeViewer.labelTitle.text = rs.rows.item(0).title;
+                codeViewer.labelDescription.text = rs.rows.item(0).description;
+                codeViewer.sourceView.text = rs.rows.item(0).snippet;
+            })
+        }
+
         model: mainWindow.mdl
 
         delegate: Component {
@@ -180,13 +190,8 @@ Rectangle {
                     onClicked: {
                         browser.focus = true
                         browser.currentIndex = index
-                        db.transaction (function(tx) {
-                                var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model.modelData.xid]);
-                                codeViewer.labelTitle.text = rs.rows.item(0).title;
-                                codeViewer.labelDescription.text = rs.rows.item(0).description;
-                                codeViewer.sourceView.text = rs.rows.item(0).snippet;
-                            }
-                        )
+
+                        parent.parent.parent.displayCodeByIndex(model.modelData.xid);
                     }
                 }
             }
@@ -197,13 +202,7 @@ Rectangle {
             if (count > 0 && currentIndex > 0)
             {
                 currentIndex--;
-                db.transaction (function(tx) {
-                        var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model[ currentIndex ].xid]);
-                        codeViewer.labelTitle.text = rs.rows.item(0).title;
-                        codeViewer.labelDescription.text = rs.rows.item(0).description;
-                        codeViewer.sourceView.text = rs.rows.item(0).snippet;
-                    }
-                )
+                displayCodeByIndex(model[currentIndex].xid);
             }
         }
 
@@ -212,13 +211,7 @@ Rectangle {
             if (currentIndex < (count-1))
             {
                 currentIndex++;
-                db.transaction (function(tx) {
-                        var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [model[ currentIndex ].xid]);
-                        codeViewer.labelTitle.text = rs.rows.item(0).title;
-                        codeViewer.labelDescription.text = rs.rows.item(0).description;
-                        codeViewer.sourceView.text = rs.rows.item(0).snippet;
-                    }
-                )
+                displayCodeByIndex(model[currentIndex].xid);
             }
         }
     } // ListView
