@@ -9,6 +9,14 @@ import QtQuick.LocalStorage 2.0
 
 // View untuk input snippet.
 Rectangle {
+    property alias contributorText: txtContributor.text
+    property alias titleText: txtTitle.text
+    property alias categoryText: txtCategory.text
+    property alias languagesText: txtLanguages.text
+    property alias descriptionText: txtDescription.text
+    property alias snippetText: editSnippet.text
+    property int idValue: 0
+
     id: addSnippetView
     objectName: "addSnippetView"
     visible: false
@@ -90,12 +98,35 @@ Rectangle {
         text: "OK"
         onClicked: {
             addSnippetView.visible = false
-            db.transaction (function(tx) {
-                    tx.executeSql ('insert into TSnippets (contributor, title, category, languages, description, snippet) values (?, ?, ?, ?, ?, ?)', [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text]);
+
+            if(idValue) {
+                db.transaction (function(tx) {
+                    var query = [
+                        "UPDATE TSnippets",
+                        "SET contributor = ?,",
+                            "title = ?,",
+                            "category = ?,",
+                            "languages = ?,",
+                            "description = ?,",
+                            "snippet = ?",
+                        "WHERE",
+                            "xid = ?",
+                        ""].join(" ");
+                    
+                    tx.executeSql (query, [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text, idValue]);
+
                     reload();
                     clearForm();
-                }
-            )
+                })
+
+                return;
+            }
+            
+            db.transaction (function(tx) {
+                tx.executeSql ('insert into TSnippets (contributor, title, category, languages, description, snippet) values (?, ?, ?, ?, ?, ?)', [txtContributor.text, txtTitle.text, txtCategory.text, txtLanguages.text, txtDescription.text, editSnippet.text]);
+                reload();
+                clearForm();
+            })
         }
         x: 0
         y: 420
