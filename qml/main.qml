@@ -15,7 +15,7 @@ ApplicationWindow {
     id: mainWindow
     visible: true
     color: "white"
-    title: "idcplc-bible"
+    title: "kodew"
     width: 900
     height: 600
     minimumWidth: 800
@@ -62,7 +62,7 @@ ApplicationWindow {
     Component.onCompleted: {
         // Buat/buka database diawal startup app.
         var dbVer = "1.2";
-        db = LocalStorage.openDatabaseSync ("idcplc-bible.sqlite", "", "icplc-bible snippets storage.", 1000000);
+        db = LocalStorage.openDatabaseSync ("kodew.sqlite", "", "icplc-bible snippets storage.", 1000000);
         if (db.version != dbVer)
         {
             console.log ("current db version: " + db.version + ", need to upgrade db to version " + dbVer);
