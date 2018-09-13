@@ -46,13 +46,16 @@ ApplicationWindow {
         db.transaction (function(tx) {
             var rs;
             if (activeCategory == 'All') {
-                rs = tx.executeSql ("SELECT xid FROM TSnippets WHERE title LIKE '%" + filter + "%'");
+                rs = tx.executeSql ("SELECT xid, title FROM TSnippets WHERE title LIKE '%" + filter + "%'");
             } else {
-                rs = tx.executeSql ("SELECT xid FROM TSnippets WHERE category=?", [activeCategory]);
+                rs = tx.executeSql ("SELECT xid, title FROM TSnippets WHERE category=?", [activeCategory]);
             }
             mainWindow.mdl = [];
             for (var i = 0; i < rs.rows.length; i++) {
-                mainWindow.mdl.push({"xid" : rs.rows.item(i).xid});
+                mainWindow.mdl.push({
+                    "xid" : rs.rows.item(i).xid,
+                    "title" : rs.rows.item(i).title
+                });
             }
             snippetBrowser.browser.model = mainWindow.mdl;
             reloadCodeViewer();

@@ -86,6 +86,7 @@ Rectangle {
 
     function clearForm()
     {
+        idValue = 0;
         txtContributor.text = ""
         txtTitle.text = ""
         txtCategory.text = ""
