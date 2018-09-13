@@ -133,13 +133,7 @@ Rectangle {
                 Label {
                     y: 10
                     height: 15
-                    text: {
-                        db.transaction (function(tx) {
-                                var rs = tx.executeSql ('select title from TSnippets where xid=?', [model.modelData.xid]);
-                                text = rs.rows.item(0).title;
-                            }
-                        )
-                    }
+                    text: model.modelData.title
                     verticalAlignment: Text.AlignVCenter
                     color: "lightgray"
                     anchors.leftMargin: 10
