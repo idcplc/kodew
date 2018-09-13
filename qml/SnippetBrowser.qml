@@ -222,5 +222,20 @@ Rectangle {
                 addSnippetView.visible = true;
             });
         }
+
+        Keys.onDeletePressed: {
+            var index = model[currentIndex].xid;
+            db.transaction (function(tx) {
+                var query = [
+                    "DELETE",
+                    "FROM",
+                        "TSnippets",
+                    "WHERE",
+                        "xid = ?",
+                    ""].join(" ");
+                var rs = tx.executeSql (query, [index]);
+                reload();
+            });
+        }
     } // ListView
 } // Snippet browser
