@@ -214,5 +214,19 @@ Rectangle {
                 displayCodeByIndex(model[currentIndex].xid);
             }
         }
+
+        Keys.onReturnPressed: {
+            var index = model[currentIndex].xid;
+            db.transaction (function(tx) {
+                var rs = tx.executeSql ("SELECT contributor, title, category, languages, description, snippet FROM TSnippets WHERE xid=?", [index]);
+                addSnippetView.idValue = index;
+                addSnippetView.contributorText = rs.rows.item(0).contributor;
+                addSnippetView.titleText = rs.rows.item(0).title;
+                addSnippetView.categoryText = rs.rows.item(0).category;
+                addSnippetView.descriptionText = rs.rows.item(0).description;
+                addSnippetView.snippetText = rs.rows.item(0).snippet;
+                addSnippetView.visible = true;
+            });
+        }
     } // ListView
 } // Snippet browser

@@ -44,18 +44,29 @@ ApplicationWindow {
         var activeCategory = categoryBrowser.browser.model[ categoryBrowser.browser.currentIndex ].category;
         var filter = snippetBrowser.txtSearch.text;
         db.transaction (function(tx) {
-                var rs;
-                if (activeCategory == 'All')
-                    rs = tx.executeSql ("select xid from TSnippets where title like '%" + filter + "%'");
-                else
-                    rs = tx.executeSql ('select xid from TSnippets where category=?', [activeCategory]);
-                mainWindow.mdl = [];
-                for (var i = 0; i < rs.rows.length; i++) {
-                    mainWindow.mdl.push({"xid" : rs.rows.item(i).xid});
-                }
-                snippetBrowser.browser.model = mainWindow.mdl
+            var rs;
+            if (activeCategory == 'All') {
+                rs = tx.executeSql ("SELECT xid FROM TSnippets WHERE title LIKE '%" + filter + "%'");
+            } else {
+                rs = tx.executeSql ("SELECT xid FROM TSnippets WHERE category=?", [activeCategory]);
             }
-        )
+            mainWindow.mdl = [];
+            for (var i = 0; i < rs.rows.length; i++) {
+                mainWindow.mdl.push({"xid" : rs.rows.item(i).xid});
+            }
+            snippetBrowser.browser.model = mainWindow.mdl;
+            reloadCodeViewer();
+        })
+    }
+
+    function reloadCodeViewer() {
+        var activeSnippetId = snippetBrowser.browser.model[snippetBrowser.browser.currentIndex].xid;
+        db.transaction (function(tx) {
+            var rs = tx.executeSql ('select title, description, snippet from TSnippets where xid=?', [activeSnippetId]);
+            codeViewer.labelTitle.text = rs.rows.item(0).title;
+            codeViewer.labelDescription.text = rs.rows.item(0).description;
+            codeViewer.sourceView.text = rs.rows.item(0).snippet;
+        })
     }
 
 
